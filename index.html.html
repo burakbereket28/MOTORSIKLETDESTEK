@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motosiklet Destek</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        color: #333;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      body.dark-mode {
+        background-color: #333;
+        color: #f0f0f0;
+      }
+
+      header {
+        background-color: #333;
+        color: #fff;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .dark-mode header {
+        background-color: #222;
+      }
+
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+
+      nav li {
+        margin: 0 1rem;
+      }
+
+      nav a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      #user-login {
+        display: flex;
+        align-items: center;
+      }
+
+      #user-login a {
+        margin-left: 1rem;
+        color: #fff;
+        text-decoration: none;
+      }
+
+      main {
+        padding: 2rem;
+      }
+
+      #hero {
+        text-align: center;
+        margin-bottom: 2rem;
+        background-image: url("motosiklet-resmi.jpg");
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        padding: 5rem 0;
+      }
+
+      #hero h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: black;
+      }
+
+      #hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        color: black;
+      }
+
+      #services {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+      }
+
+      .service {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        text-align: center;
+        background-color: #fff;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .dark-mode .service {
+        background-color: #444;
+        color: #f0f0f0;
+      }
+
+      #contact {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .dark-mode #contact {
+        background-color: #444;
+        color: #f0f0f0;
+      }
+
+      #contact h2 {
+        margin-bottom: 1rem;
+      }
+
+      #contact form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      #contact input,
+      #contact textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+
+      #contact textarea {
+        grid-column: 1 / 3;
+      }
+
+      #contact button {
+        grid-column: 2 / 3;
+        justify-self: end;
+        background-color: #333;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      footer {
+        background-color: #333;
+        color: #fff;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      #forum {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 5px;
+        margin-top: 2rem;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .dark-mode #forum {
+        background-color: #444;
+        color: #f0f0f0;
+      }
+
+      #forum h2 {
+        margin-bottom: 1rem;
+      }
+
+      #forum-posts {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .forum-post {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 3px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .dark-mode .forum-post {
+        background-color: #555;
+        color: #f0f0f0;
+      }
+
+      .forum-post h3 {
+        margin-bottom: 0.5rem;
+      }
+
+      .forum-post p {
+        margin: 0;
+      }
+
+      #new-post-form {
+        display: none;
+        margin-top: 1rem;
+      }
+
+      #new-post-form input,
+      #new-post-form textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 1rem;
+      }
+
+      #new-post-form select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-bottom: 1rem;
+      }
+
+      #new-post-form button {
+        background-color: #333;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      /* Modal için stil */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 5px;
+      }
+
+      .dark-mode .modal-content {
+        background-color: #444;
+        color: #f0f0f0;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .dark-mode .close:hover,
+      .dark-mode .close:focus {
+        color: #f0f0f0;
+      }
+
+      /* Responsive Tasarım */
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        nav ul {
+          flex-direction: column;
+        }
+
+        nav li {
+          margin: 0.5rem 0;
+        }
+
+        #services {
+          grid-template-columns: 1fr;
+        }
+
+        #contact form {
+          grid-template-columns: 1fr;
+        }
+
+        #contact textarea {
+          grid-column: 1 / 2;
+        }
+
+        #contact button {
+          grid-column: 1 / 2;
+          justify-self: center;
+        }
+      }
+
+      /* Yeni Eklenen CSS Kodları */
+      .forum-post-actions {
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+      }
+
+      .forum-post-actions button {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-right: 0.5rem;
+      }
+
+      .forum-post-actions button:hover {
+        background-color: #555;
+      }
+
+      .like-count {
+        margin-left: 0.5rem;
+        font-weight: bold;
+      }
+
+      .comments-section {
+        margin-top: 1rem;
+        padding-left: 1rem;
+        border-left: 2px solid #ccc;
+      }
+
+      .comment {
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        background-color: #f9f9f9;
+        border-radius: 3px;
+      }
+
+      .dark-mode .comment {
+        background-color: #666;
+        color: #f0f0f0;
+      }
+
+      .comment-form {
+        margin-top: 1rem;
+      }
+
+      .comment-form input {
+        width: 80%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-right: 0.5rem;
+      }
+
+      .comment-form button {
+        padding: 0.5rem 1rem;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .dark-mode .comment-form button {
+        background-color: #555;
+      }
+
+      /* Motorsiklet Turları Bölümü Stilleri */
+      #tours {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 5px;
+        margin-top: 2rem;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .dark-mode #tours {
+        background-color: #444;
+        color: #f0f0f0;
+      }
+
+      #featured-tours,
+      #all-tours {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .tour {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 3px;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .dark-mode .tour {
+        background-color: #555;
+        color: #f0f0f0;
+      }
+
+      .tour h3 {
+        margin-bottom: 0.5rem;
+      }
+
+      .tour p {
+        margin: 0.5rem 0;
+      }
+
+      .rating {
+        margin: 1rem 0;
+      }
+
+      .stars {
+        color: #ffd700; /* Altın rengi */
+      }
+
+      #show-more-tours {
+        margin-top: 1rem;
+        background-color: #333;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .dark-mode #show-more-tours {
+        background-color: #555;
+      }
+
+      /* Kendi Rotanı Oluştur Bölümü Stilleri */
+      #create-tour {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 5px;
+        margin-top: 2rem;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .dark-mode #create-tour {
+        background-color: #444;
+        color: #f0f0f0;
+      }
+
+      #tour-form {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      #tour-form label {
+        font-weight: bold;
+      }
+
+      #tour-form input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+
+      #tour-form button {
+        background-color: #333;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .dark-mode #tour-form button {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Motosiklet Destek</h1>
+      <nav>
+        <ul>
+          <li><a href="#hero">Ana Sayfa</a></li>
+          <li><a href="#services">Hizmetler</a></li>
+          <li><a href="#contact">İletişim</a></li>
+          <li><a href="#forum">Forum</a></li>
+        </ul>
+      </nav>
+      <div id="user-login">
+        <a href="#" onclick="girisYap()">Giriş Yap</a>
+        <a href="#" onclick="kayitOl()">Kayıt Ol</a>
+        <button onclick="toggleDarkMode()">Koyu Mod</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="hero">
+        <h2>Motosiklet Tutkunlarına Özel Destek</h2>
+        <p>Motosikletinizle ilgili her türlü konuda size yardımcı oluyoruz.</p>
+        <button onclick="dahaFazlaBilgi()">Daha Fazla Bilgi</button>
+      </section>
+
+      <section id="services">
+        <h2>Hizmetlerimiz</h2>
+        <div class="service">
+          <h3>Bakım ve Onarım</h3>
+          <p>
+            Motosikletinizin düzenli bakımını yapıyor, arızalarını gideriyoruz.
+          </p>
+        </div>
+        <div class="service">
+          <h3>Yedek Parça Önerisi</h3>
+          <p>
+            Yeni bir yedek parça almam gerekiyor. Hangi markayı önerirsiniz?
+          </p>
+        </div>
+        <div class="service">
+          <h3>Eğitimler</h3>
+          <p>Güvenli sürüş teknikleri konusunda eğitimler düzenliyoruz.</p>
+        </div>
+      </section>
+
+      <!-- Motorsiklet Turları Bölümü -->
+      <section id="tours">
+        <h2>Motorsiklet Turları</h2>
+        <div id="featured-tours">
+          <div class="tour">
+            <h3>Kapadokya Turu</h3>
+            <p><strong>Uzunluk:</strong> 250 km</p>
+            <p>
+              <strong>Aktiviteler:</strong> Balon turu, tarihi yerler, doğa
+              yürüyüşü
+            </p>
+            <div class="rating">
+              <span>Puan: </span>
+              <span class="stars">★★★★☆</span>
+            </div>
+            <button onclick="toggleTourDetails('kapadokya')">Detaylar</button>
+          </div>
+          <div class="tour">
+            <h3>Ege Sahil Turu</h3>
+            <p><strong>Uzunluk:</strong> 400 km</p>
+            <p>
+              <strong>Aktiviteler:</strong> Plajlar, antik kentler, yemek
+              turları
+            </p>
+            <div class="rating">
+              <span>Puan: </span>
+              <span class="stars">★★★★★</span>
+            </div>
+            <button onclick="toggleTourDetails('ege')">Detaylar</button>
+          </div>
+          <div class="tour">
+            <h3>Karadeniz Yaylalar Turu</h3>
+            <p><strong>Uzunluk:</strong> 300 km</p>
+            <p>
+              <strong>Aktiviteler:</strong> Yayla gezisi, şelaleler, yerel
+              lezzetler
+            </p>
+            <div class="rating">
+              <span>Puan: </span>
+              <span class="stars">★★★☆☆</span>
+            </div>
+            <button onclick="toggleTourDetails('karadeniz')">Detaylar</button>
+          </div>
+        </div>
+        <button id="show-more-tours" onclick="toggleAllTours()">
+          Daha Fazla Tur Göster
+        </button>
+        <div id="all-tours" style="display: none">
+          <div class="tour">
+            <h3>Akdeniz Turu</h3>
+            <p><strong>Uzunluk:</strong> 500 km</p>
+            <p>
+              <strong>Aktiviteler:</strong> Deniz turu, antik kentler, dalış
+            </p>
+            <div class="rating">
+              <span>Puan: </span>
+              <span class="stars">★★★★☆</span>
+            </div>
+          </div>
+          <div class="tour">
+            <h3>Doğu Anadolu Turu</h3>
+            <p><strong>Uzunluk:</strong> 600 km</p>
+            <p>
+              <strong>Aktiviteler:</strong> Dağ tırmanışı, göller, kültür turu
+            </p>
+            <div class="rating">
+              <span>Puan: </span>
+              <span class="stars">★★★☆☆</span>
+            </div>
+          </div>
+          <div class="tour">
+            <h3>Marmara Turu</h3>
+            <p><strong>Uzunluk:</strong> 350 km</p>
+            <p>
+              <strong>Aktiviteler:</strong> Şehir turu, adalar, tarihi mekanlar
+            </p>
+            <div class="rating">
+              <span>Puan: </span>
+              <span class="stars">★★★★☆</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Kullanıcıların Kendi Rotasını Oluşturması İçin Form -->
+      <section id="create-tour">
+        <h2>Kendi Rotanı Oluştur</h2>
+        <form id="tour-form">
+          <label for="start-point">Başlangıç Noktası:</label>
+          <input type="text" id="start-point" required />
+
+          <label for="stops">Duraklar (Virgülle Ayırın):</label>
+          <input type="text" id="stops" required />
+
+          <label for="end-point">Bitiş Noktası:</label>
+          <input type="text" id="end-point" required />
+
+          <label for="distance">Tahmini Uzunluk (km):</label>
+          <input type="number" id="distance" required />
+
+          <button type="button" onclick="calculateDistance()">
+            Google Haritalar ile Hesapla
+          </button>
+          <button type="submit">Rotayı Kaydet</button>
+        </form>
+      </section>
+
+      <section id="forum">
+        <h2>Forum</h2>
+        <div id="forum-posts"></div>
+        <button onclick="gosterForm()">Yeni Sorun Ekle</button>
+        <div id="new-post-form">
+          <select id="motor-markasi" onchange="modelSecim()">
+            <option value="">Motor Markası Seçin</option>
+            <option value="Yamaha">Yamaha</option>
+            <option value="Honda">Honda</option>
+            <option value="Kawasaki">Kawasaki</option>
+            <option value="Suzuki">Suzuki</option>
+            <option value="BMW">BMW</option>
+            <option value="Harley Davidson">Harley Davidson</option>
+            <option value="Ducati">Ducati</option>
+            <option value="KTM">KTM</option>
+            <option value="Triumph">Triumph</option>
+          </select>
+
+          <select id="motor-modeli" disabled>
+            <option value="">Model Seçin</option>
+          </select>
+
+          <input type="text" id="post-title" placeholder="Başlık" required />
+          <textarea
+            id="post-content"
+            placeholder="Sorununuz"
+            required
+          ></textarea>
+          <button onclick="yeniSoruEkle()">Soruyu Ekle</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Motosiklet Destek</p>
+    </footer>
+
+    <!-- Modal -->
+    <div id="infoModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="kapaliModal()">&times;</span>
+        <h2 id="modal-baslik"></h2>
+        <p id="modal-icerik"></p>
+      </div>
+    </div>
+
+    <script>
+      // Kullanıcı giriş durumu
+      var kullaniciGirisiYapildi = false;
+
+      // Giriş Yap Fonksiyonu (Güncellendi)
+      function girisYap() {
+        var kullaniciAdi = prompt("Kullanıcı Adınızı Girin:");
+        var sifre = prompt("Şifrenizi Girin:");
+
+        var kayitliKullaniciAdi = localStorage.getItem("kullaniciAdi");
+        var kayitliSifre = localStorage.getItem("sifre");
+
+        if (kullaniciAdi === kayitliKullaniciAdi && sifre === kayitliSifre) {
+          alert("Giriş Başarılı!");
+          kullaniciGirisiYapildi = true;
+          document.getElementById(
+            "user-login"
+          ).innerHTML = `<span>Hoş geldiniz, ${kullaniciAdi}!</span> <button onclick="toggleDarkMode()">Koyu Mod</button>`;
+        } else {
+          alert("Hatalı Kullanıcı Adı veya Şifre!");
+          kullaniciGirisiYapildi = false;
+        }
+      }
+
+      // Kayıt Ol Fonksiyonu
+      function kayitOl() {
+        var kullaniciAdi = prompt("Yeni Kullanıcı Adı:");
+        var sifre = prompt("Yeni Şifre:");
+
+        if (kullaniciAdi && sifre) {
+          localStorage.setItem("kullaniciAdi", kullaniciAdi);
+          localStorage.setItem("sifre", sifre);
+          alert("Kayıt Başarılı! Giriş yapabilirsiniz.");
+        } else {
+          alert("Lütfen kullanıcı adı ve şifre girin.");
+        }
+      }
+
+      // Modal Fonksiyonları (Güncellendi)
+      function dahaFazlaBilgi() {
+        var modal = document.getElementById("infoModal");
+        var modalBaslik = document.getElementById("modal-baslik");
+        var modalIcerik = document.getElementById("modal-icerik");
+
+        modalBaslik.textContent = "İleri Seviye Sürüş İpuçları";
+        modalIcerik.innerHTML = `
+          <p><strong>1. Fren Mesafesini Azaltın:</strong> Frenleme sırasında her zaman sağ ve sol frenleri dengeli kullanmaya çalışın. Keskin frenleme sürüşünüzü zora sokabilir.</p>
+          <p><strong>2. Vücut Pozisyonunu Düzgün Ayarlayın:</strong> Virajlarda vücut pozisyonunuzu değiştirin, böylece motosikletinizin denge noktasını kontrol edebilirsiniz.</p>
+          <p><strong>3. Hız Kontrolü:</strong> Hızınızı yol koşullarına göre ayarlayın ve aniden hızlanmaktan kaçının. Yavaş başlamak her zaman daha güvenlidir.</p>
+          <p><strong>4. Yol Koşullarına Dikkat Edin:</strong> Asfaltın durumu ve hava koşulları sürüş güvenliğinizi etkileyebilir, her zaman dikkatli olun.</p>
+          <p><strong>5. Sürekli Egzersiz:</strong> Sürekli pratik yaparak sürüş becerilerinizi geliştirin. Zamanla daha kontrollü ve güvenli sürücüler olursunuz.</p>
+        `;
+        modal.style.display = "block";
+      }
+
+      function kapaliModal() {
+        var modal = document.getElementById("infoModal");
+        modal.style.display = "none";
+      }
+
+      // Koyu Mod Fonksiyonu
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+      }
+
+      // Yeni Soru Ekleme Fonksiyonu (Güncellendi)
+      function yeniSoruEkle() {
+        var baslik = document.getElementById("post-title").value;
+        var icerik = document.getElementById("post-content").value;
+        var model = document.getElementById("motor-modeli").value;
+
+        if (baslik && icerik && model) {
+          var yeniGonderi = {
+            id: Date.now(), // Benzersiz bir ID ekledik
+            baslik: baslik,
+            icerik: icerik,
+            model: model,
+            likes: 0, // Like sayısı
+            comments: [], // Yorumlar
+          };
+
+          var gonderiler = JSON.parse(localStorage.getItem("gonderiler")) || [];
+          gonderiler.push(yeniGonderi);
+          localStorage.setItem("gonderiler", JSON.stringify(gonderiler));
+
+          forumGonderileriniGoster();
+          document.getElementById("post-title").value = "";
+          document.getElementById("post-content").value = "";
+          document.getElementById("motor-modeli").value = "";
+          document.getElementById("new-post-form").style.display = "none";
+        } else {
+          alert("Lütfen tüm alanları doldurun.");
+        }
+      }
+
+      // Like Atma Fonksiyonu
+      function likePost(postId) {
+        var gonderiler = JSON.parse(localStorage.getItem("gonderiler")) || [];
+        var gonderi = gonderiler.find((g) => g.id === postId);
+        if (gonderi) {
+          gonderi.likes++;
+          localStorage.setItem("gonderiler", JSON.stringify(gonderiler));
+          forumGonderileriniGoster();
+        }
+      }
+
+      // Yorum Ekleme Fonksiyonu
+      function addComment(postId, commentText) {
+        var gonderiler = JSON.parse(localStorage.getItem("gonderiler")) || [];
+        var gonderi = gonderiler.find((g) => g.id === postId);
+        if (gonderi && commentText) {
+          gonderi.comments.push(commentText);
+          localStorage.setItem("gonderiler", JSON.stringify(gonderiler));
+          forumGonderileriniGoster();
+        }
+      }
+
+      // Forum Gönderilerini Göster (Güncellendi)
+      function forumGonderileriniGoster() {
+        var gonderiler = JSON.parse(localStorage.getItem("gonderiler")) || [];
+        var forumPosts = document.getElementById("forum-posts");
+        forumPosts.innerHTML = "";
+
+        gonderiler.forEach(function (gonderi) {
+          var forumPost = document.createElement("div");
+          forumPost.classList.add("forum-post");
+          forumPost.innerHTML = `
+            <h3>${gonderi.baslik}</h3>
+            <p>${gonderi.icerik}</p>
+            <p><strong>Model:</strong> ${gonderi.model}</p>
+            <div class="forum-post-actions">
+              <button onclick="likePost(${gonderi.id})">Like</button>
+              <span class="like-count">${gonderi.likes} Likes</span>
+            </div>
+            <div class="comments-section">
+              <h4>Yorumlar</h4>
+              ${gonderi.comments
+                .map((comment) => `<div class="comment">${comment}</div>`)
+                .join("")}
+              <div class="comment-form">
+                <input type="text" id="comment-${
+                  gonderi.id
+                }" placeholder="Yorumunuz" />
+                <button onclick="addComment(${
+                  gonderi.id
+                }, document.getElementById('comment-${gonderi.id}').value)">
+                  Yorum Yap
+                </button>
+              </div>
+            </div>
+          `;
+          forumPosts.appendChild(forumPost);
+        });
+      }
+
+      // Model Seçimi Fonksiyonu
+      function modelSecim() {
+        var marka = document.getElementById("motor-markasi").value;
+        var modelSelect = document.getElementById("motor-modeli");
+        modelSelect.disabled = false;
+        modelSelect.innerHTML = "<option value=''>Model Seçin</option>";
+
+        var modeller = [];
+
+        switch (marka) {
+          case "Yamaha":
+            modeller = ["YZF-R1", "MT-07", "FZ-09"];
+            break;
+          case "Honda":
+            modeller = ["CBR600RR", "CBR1000RR", "CRF250L"];
+            break;
+          case "Kawasaki":
+            modeller = ["Ninja ZX-6R", "Versys 650", "Z1000"];
+            break;
+          case "Suzuki":
+            modeller = ["GSX-R1000", "SV650", "V-Strom 650"];
+            break;
+          case "BMW":
+            modeller = ["S1000RR", "R1250GS", "F900R"];
+            break;
+          case "Harley Davidson":
+            modeller = ["Sportster S", "Iron 883", "Road King"];
+            break;
+          case "Ducati":
+            modeller = ["Panigale V4", "Monster 821", "Multistrada V4"];
+            break;
+          case "KTM":
+            modeller = ["Duke 390", "RC 390", "Adventure 890"];
+            break;
+          case "Triumph":
+            modeller = ["Street Triple", "Bonneville", "Tiger 900"];
+            break;
+          default:
+            modeller = [];
+        }
+
+        modeller.forEach(function (model) {
+          var option = document.createElement("option");
+          option.value = model;
+          option.textContent = model;
+          modelSelect.appendChild(option);
+        });
+      }
+
+      // Form Göster Fonksiyonu
+      function gosterForm() {
+        if (!kullaniciGirisiYapildi) {
+          alert("Lütfen önce giriş yapınız.");
+          return;
+        }
+        document.getElementById("new-post-form").style.display = "block";
+        document.getElementById("post-title").focus();
+      }
+
+      // Tüm Turları Göster/Gizle Fonksiyonu
+      function toggleAllTours() {
+        var allTours = document.getElementById("all-tours");
+        var showMoreButton = document.getElementById("show-more-tours");
+
+        if (allTours.style.display === "none") {
+          allTours.style.display = "grid";
+          showMoreButton.textContent = "Daha Az Tur Göster";
+        } else {
+          allTours.style.display = "none";
+          showMoreButton.textContent = "Daha Fazla Tur Göster";
+        }
+      }
+
+      // Tur Detaylarını Göster/Gizle Fonksiyonu
+      function toggleTourDetails(tourId) {
+        var tourDetails = document.getElementById(tourId + "-details");
+        if (tourDetails) {
+          if (tourDetails.style.display === "none") {
+            tourDetails.style.display = "block";
+          } else {
+            tourDetails.style.display = "none";
+          }
+        } else {
+          alert("Tur detayları henüz eklenmedi.");
+        }
+      }
+
+      // Google Haritalar ile Mesafe Hesaplama Fonksiyonu
+      function calculateDistance() {
+        var startPoint = document.getElementById("start-point").value;
+        var endPoint = document.getElementById("end-point").value;
+
+        if (startPoint && endPoint) {
+          // Bu kısımda Google Haritalar API'si kullanılabilir.
+          // Örnek olarak sabit bir değer atıyorum.
+          document.getElementById("distance").value = 300; // Örnek değer
+          alert("Mesafe hesaplandı: 300 km");
+        } else {
+          alert("Lütfen başlangıç ve bitiş noktalarını girin.");
+        }
+      }
+
+      // Rota Kaydetme Fonksiyonu
+      document
+        .getElementById("tour-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var startPoint = document.getElementById("start-point").value;
+          var stops = document.getElementById("stops").value;
+          var endPoint = document.getElementById("end-point").value;
+          var distance = document.getElementById("distance").value;
+
+          if (startPoint && stops && endPoint && distance) {
+            alert("Rota başarıyla kaydedildi!");
+            // Burada rotayı localStorage'a kaydedebilirsiniz.
+          } else {
+            alert("Lütfen tüm alanları doldurun.");
+          }
+        });
+
+      // Sayfa Yüklendiğinde Çalışacak Fonksiyonlar
+      window.onload = function () {
+        forumGonderileriniGoster();
+        const navLinks = document.querySelectorAll("nav a");
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function (event) {
+            event.preventDefault();
+            const targetId = this.getAttribute("href");
+            const targetElement = document.querySelector(targetId);
+            targetElement.scrollIntoView({ behavior: "smooth" });
+          });
+        });
+      };
+    </script>
+  </body>
+</html>
